@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat App - Built by Craig Beyer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  </head>
+  <style>
+    body {
+      background-color: rgb(32, 32, 32);
+    }
+    .container-fluid {
+      margin-top: 100px;
+    }
+    .col-lg-8 {
+      padding: 40px;
+      background-color: rgb(39, 39, 39) !important;
+    }
+
+    .col-lg-4 {
+      padding: 20px;
+    }
+
+   #messages  {
+      list-style-type: none;
+    }
+
+    li {
+      color: rgb(177, 177, 177);
+    }
+
+    input {
+      border: 1px solid grey !important;
+      color: rgb(206, 206, 206) !important;
+      background: none !important;
+    }
+
+    input::placeholder {
+      color: rgb(146, 146, 146) !important;
+    }
+
+    button:hover {
+      background-color: rgb(132, 168, 77) !important;
+    }
+
+    #messages {
+      padding: 20px;
+      border: 1px solid rgb(94, 94, 94);
+    }
+
+    .header {
+      color: rgb(177, 177, 177);
+      text-align: center;
+    }
+
+    .card {
+      display: none;
+      border: 1px solid grey;
+      text-align: center;
+      width: 200px;
+      height:auto;
+      margin-top: 50px;
+      color: rgb(177, 177, 177);
+      background-color: rgb(39, 39, 39) !important;
+    }
+
+    hr {
+      width: 50%;
+      border: 1px solid grey;
+    }
+
+    .room-list {
+      text-align: center;
+      list-style-type: none;
+      font-size: 14px;
+    }
+
+    .rooms {
+      margin-bottom: 10px;
+    }
+  </style>
+
+<body>
+  <div class="container-fluid header">
+    <h3>Chat</h3>
+    <p>A simple messaging application</p>
+    <hr>
+  </div>
+    <div class="container-fluid">
+        <div class="row" id="messageArea">
+            <div class="col-lg-8">
+              <form action="">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control shadow" id="m" placeholder="Enter your message here" aria-label="Enter your message here" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
+                </div>
+              </div>
+              </form>
+                  <ul id="messages" class="shadow-lg"></ul>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body" id="sortable">
+                        <h5 class="card-title">Room list</h5>
+                        <button type="button" class="rooms btn btn-secondary">
+                          Ground zero <span class="badge badge-light">5</span>
+                          <span class="sr-only">unread messages</span>
+                        </button>
+                        <button type="button" class="rooms btn btn-secondary">
+                          The cave <span class="badge badge-light">7</span>
+                          <span class="sr-only">unread messages</span>
+                        </button>
+                        <button type="button" class="rooms btn btn-secondary">
+                          Travel <span class="badge badge-light">3</span>
+                          <span class="sr-only">unread messages</span>
+                        </button>
+                        <button type="button" class="rooms btn btn-secondary">
+                          Music <span class="badge badge-light">9</span>
+                          <span class="sr-only">unread messages</span>
+                        </button>
+                        <p style="text-decoration: underline">Create room</p>
+                    </div>
+                  </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+var socket = io();
+
+$('form').submit(function(e){
+  e.preventDefault();
+  socket.emit('chat message', $('#m').val());
+  $('#m').val('');
+  return false;
+});
+socket.on('chat message', function(msg){
+  $('#messages').append($('<li>').text(msg));
+});
+});
+
+</script>
+</body>
+</html>
